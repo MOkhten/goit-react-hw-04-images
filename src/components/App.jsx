@@ -1,7 +1,7 @@
 
 import { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { Searchbar } from './Searchbar/Searchbar';
+import { SearchBar } from './Searchbar/Searchbar';
 import { fetchImages } from '../Services/Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Spiner } from './Spiner/Spiner';
@@ -66,7 +66,7 @@ export class App extends Component {
     console.log({images});
     return (
       <div>
-        <Searchbar onSubmit={this.handleSubmit} />
+        <SearchBar onSubmit={this.handleSubmit} />
         <ImageGallery images={images} onClick={this.toggleModal} />
         {status === 'loading' && <Spiner />}
         {status === 'finished' && <Button loadMore={this.loadMore} />}
