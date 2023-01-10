@@ -4,14 +4,14 @@ import PropTypes from 'prop-types';
 import css from './Seachbar.module.css';
 import { FiSearch } from 'react-icons/fi';
 
-export function SearchBar({onSubmit}) {
+export function NewSearchBar({onSubmit}) {
   const [search, setSearch] = useState('');
  const inputChange = e => setSearch(e.currentTarget.value);
   
  const handleSubmit = e => {
     e.preventDefault();
     onSubmit(search.toLowerCase());
-    setSearch({ search: '' });
+    setSearch('');
   };
 
   return (
@@ -38,6 +38,6 @@ export function SearchBar({onSubmit}) {
 }
 
 
-SearchBar.propTypes = {
+NewSearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
