@@ -13,6 +13,7 @@ export function App() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('idle');
+  const [modalImg, setModalImg] = useState('');
 
   useEffect(() => {
      if (query === '') {
@@ -40,7 +41,7 @@ export function App() {
     
      fetchData();
     
-    // return ()=>{}
+    return ()=>{}
   },
     [page, query]);
 
@@ -51,86 +52,24 @@ export function App() {
     setImages([]);
       };
   
+  const loadMore = () => {
+    setPage(prevPage => prevPage +1)
+  };
+
+  const toggleModal = (image) => {
+    setModalImg( image );
+  }
 
   return (
     <>
        <NewSearchBar onSubmit={handleSubmit} />
-      <ImageGallery images={images} />
+      <ImageGallery images={images} onClick={toggleModal}/>
       {status === 'loading' && <Spiner />}
+      {status === 'finished' && <Button loadMore={loadMore} />}
+      {modalImg && <Modal image={modalImg} onClose={toggleModal} />}
+      <ToastContainer />
     </>
   )
 }
-
-// export class App extends Component {
-//   state = {
-//     query: '',
-//     status: 'idle',
-//     page: 1,
-//     images: [],
-//     modalImg: '',
-//   };
-
-
-//   async componentDidUpdate(_, prevState) {
-//     const { page, query } = this.state;
-  
-//       if (prevState.query !== query || prevState.page !== page) {
-//          try {
-//         this.setState({ status: 'loading' })
-//         const res = await fetchImages(query, page);
-//         if (res.total === 0) {
-//           toast.error(
-          //   'Sorry, there are no images matching your search query. Please try again.'
-          // );
-//         }
-//          this.setState(prevState => ({
-//            images: [...prevState.images, ...res.hits],
-//            status: 'finished'
-//          }));
-//       }
-//      catch (error) {
-//            toast.error('Oops! Something went wrong! Please try again.');
-//            }
-//            this.setState({ status: 'idle' });
-//   }
-//   }
-
-
-//      handleSubmit = search => {
-//       this.setState({
-//         query: search,
-//         page: 1,
-//       images: [],
-//       });
-//   };
-
- 
-
-//   loadMore = () => {
-//     this.setState(prevState => ({
-//       page: prevState.page + 1,
-//     }));
-//   };
-
-//   toggleModal = (image) => {
-//     this.setState({ modalImg: image });
-//   }
-
-//   render() {
-//     const { images, status, modalImg } = this.state;
-//     console.log({images});
-//     return (
-//       <div>
-//         <NewSearchBar onSubmit={this.handleSubmit} />
-//         <ImageGallery images={images} onClick={this.toggleModal} />
-//         {status === 'loading' && <Spiner />}
-//         {status === 'finished' && <Button loadMore={this.loadMore} />}
-//         {modalImg && <Modal image={modalImg} onClose={this.toggleModal} />}
-//         <ToastContainer />
-//       </div>
-//     );
-//   }
-// }
-
 
 
