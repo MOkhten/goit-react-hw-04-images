@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 import { NewSearchBar } from './Searchbar/Searchbar';
 import { fetchImages } from '../Services/Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -14,6 +14,7 @@ export function App() {
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('idle');
   const [modalImg, setModalImg] = useState('');
+  
 
   useEffect(() => {
      if (query === '') {
@@ -31,19 +32,16 @@ export function App() {
           );
         }
         setImages(prevState => [...prevState, ...res.hits]);
-          setStatus('finished');
+        setStatus('finished');
       }
       catch (error) {
-        toast.error('Oops! Something went wrong! Please try again.');
+       toast.error('Oops! Something went wrong! Please try again.');
+        setStatus('idle');
       }
-       setStatus('idle');
     }
-    
      fetchData();
     
-    return ()=>{}
-  },
-    [page, query]);
+  }, [page, query]);
 
 
   const  handleSubmit = search => {
@@ -52,8 +50,8 @@ export function App() {
     setImages([]);
       };
   
-  const loadMore = () => {
-    setPage(prevPage => prevPage +1)
+ const loadMore = () => {
+    setPage(prevState => prevState + 1);
   };
 
   const toggleModal = (image) => {
@@ -62,12 +60,14 @@ export function App() {
 
   return (
     <>
+      <div>
        <NewSearchBar onSubmit={handleSubmit} />
       <ImageGallery images={images} onClick={toggleModal}/>
       {status === 'loading' && <Spiner />}
-      {status === 'finished' && <Button loadMore={loadMore} />}
+      {images.length > 11 && <Button loadMore={loadMore} />}
       {modalImg && <Modal image={modalImg} onClose={toggleModal} />}
-      <ToastContainer />
+        <Toaster />
+        </div>
     </>
   )
 }
